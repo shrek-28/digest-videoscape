@@ -20,6 +20,14 @@ const AnimatedBackground = () => (
 const SignUpModal = ({ isOpen, onClose, isDarkMode }) => {
   if (!isOpen) return null;
 
+  const handleSocialLogin = (platform: string) => {
+    window.open({
+      'twitter': 'https://twitter.com/login',
+      'linkedin': 'https://linkedin.com/login',
+      'google': 'https://google.com'
+    }[platform], '_blank');
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center animate-fadeIn">
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
@@ -60,13 +68,13 @@ const SignUpModal = ({ isOpen, onClose, isDarkMode }) => {
             </div>
 
             <div className="grid grid-cols-3 gap-3">
-              <Button variant="outline" className="w-full hover:scale-105 transition-transform">
+              <Button variant="outline" className="w-full hover:scale-105 transition-transform" onClick={() => handleSocialLogin('google')}>
                 <Globe className="h-5 w-5" />
               </Button>
-              <Button variant="outline" className="w-full hover:scale-105 transition-transform">
+              <Button variant="outline" className="w-full hover:scale-105 transition-transform" onClick={() => handleSocialLogin('twitter')}>
                 <Twitter className="h-5 w-5 text-[#1DA1F2]" />
               </Button>
-              <Button variant="outline" className="w-full hover:scale-105 transition-transform">
+              <Button variant="outline" className="w-full hover:scale-105 transition-transform" onClick={() => handleSocialLogin('linkedin')}>
                 <Linkedin className="h-5 w-5 text-[#0A66C2]" />
               </Button>
             </div>
@@ -80,12 +88,21 @@ const SignUpModal = ({ isOpen, onClose, isDarkMode }) => {
 const Index = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('hero');
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       setIsDarkMode(window.matchMedia('(prefers-color-scheme: dark)').matches);
     }
   }, []);
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+      setActiveSection(sectionId);
+    }
+  };
 
   return (
     <div className={isDarkMode ? 'dark' : ''}>
@@ -98,6 +115,20 @@ const Index = () => {
             <div className="flex justify-between items-center">
               <span className="text-2xl font-bold">ResearchDigest</span>
               <div className="flex items-center space-x-4">
+                <Button
+                  variant="ghost"
+                  onClick={() => scrollToSection('about')}
+                  className="hover:scale-105 transition-transform"
+                >
+                  About
+                </Button>
+                <Button
+                  variant="ghost"
+                  onClick={() => scrollToSection('features')}
+                  className="hover:scale-105 transition-transform"
+                >
+                  Features
+                </Button>
                 <Button
                   variant="ghost"
                   size="icon"
@@ -121,7 +152,7 @@ const Index = () => {
         </nav>
 
         {/* Hero Section */}
-        <section className="relative pt-20 pb-32 flex items-center min-h-screen">
+        <section id="hero" className="relative pt-20 pb-32 flex items-center min-h-screen">
           <div className="container mx-auto px-4">
             <div className="text-center max-w-4xl mx-auto">
               <h1 className="text-5xl md:text-7xl font-bold mb-8 leading-tight">
@@ -145,6 +176,63 @@ const Index = () => {
                 Try for free
                 <ArrowRight className="ml-2 h-5 w-5 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
               </Button>
+            </div>
+          </div>
+        </section>
+
+        {/* About Section */}
+        <section id="about" className="py-20 relative">
+          <div className="container mx-auto px-4">
+            <div className="text-center max-w-3xl mx-auto">
+              <h2 className="text-4xl font-bold mb-8">About ResearchDigest</h2>
+              <p className="text-lg mb-12 text-gray-600 dark:text-gray-300">
+                We transform complex research papers into engaging video summaries, making it easier for researchers 
+                to stay updated with the latest developments in their field. Our AI-powered platform processes thousands 
+                of papers daily to bring you the most relevant insights.
+              </p>
+              <div className="grid md:grid-cols-2 gap-8">
+                <Card className={`p-6 ${isDarkMode ? 'bg-gray-800 border-gray-700' : ''}`}>
+                  <h3 className="text-xl font-bold mb-4">Our Mission</h3>
+                  <p className="text-gray-600 dark:text-gray-300">
+                    To make research accessible and engaging for everyone in academia and industry.
+                  </p>
+                </Card>
+                <Card className={`p-6 ${isDarkMode ? 'bg-gray-800 border-gray-700' : ''}`}>
+                  <h3 className="text-xl font-bold mb-4">Our Vision</h3>
+                  <p className="text-gray-600 dark:text-gray-300">
+                    To revolutionize how researchers stay updated with cutting-edge developments.
+                  </p>
+                </Card>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Features Section */}
+        <section id="features" className="py-20 relative">
+          <div className="container mx-auto px-4">
+            <h2 className="text-4xl font-bold text-center mb-12">Key Features</h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+              <Card className={`p-6 transform transition-all duration-300 hover:scale-105 ${isDarkMode ? 'bg-gray-800 border-gray-700' : ''}`}>
+                <BrainCircuit className="w-12 h-12 mb-4 text-violet-500" />
+                <h3 className="text-xl font-bold mb-2">AI-Powered Analysis</h3>
+                <p className="text-gray-600 dark:text-gray-300">Advanced algorithms process thousands of papers daily</p>
+              </Card>
+              <Card className={`p-6 transform transition-all duration-300 hover:scale-105 ${isDarkMode ? 'bg-gray-800 border-gray-700' : ''}`}>
+                <Video className="w-12 h-12 mb-4 text-purple-500" />
+                <h3 className="text-xl font-bold mb-2">Video Summaries</h3>
+                <p className="text-gray-600 dark:text-gray-300">Engaging video content from complex research papers</p>
+              </Card>
+              <Card className={`p-6 transform transition-all duration-300 hover:scale-105 ${isDarkMode ? 'bg-gray-800 border-gray-700' : ''}`}>
+                <Newspaper className="w-12 h-12 mb-4 text-pink-500" />
+                <h3 className="text-xl font-bold mb-2">Daily Updates</h3>
+                <p className="text-gray-600 dark:text-gray-300">Fresh research content delivered every day</p>
+              </Card>
+              <Card className={`p-6 transform transition-all duration-300 hover:scale-105 ${isDarkMode ? 'bg-gray-800 border-gray-700' : ''}`}>
+                <Send className="w-12 h-12 mb-4 text-violet-500" />
+                <h3 className="text-xl font-bold mb-2">Email Delivery</h3>
+                <p className="text-gray-600 dark:text-gray-300">Convenient delivery straight to your inbox</p>
+              </Card>
             </div>
           </div>
         </section>
