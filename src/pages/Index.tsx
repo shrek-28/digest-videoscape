@@ -83,7 +83,7 @@ const FloatingButtons = ({ onChatClick, onContactClick }) => {
             <Button
               size="icon"
               className="rounded-full w-12 h-12 bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600 
-              shadow-lg hover:shadow-violet-500/50 hover:scale-110 transition-all duration-300
+              shadow-lg hover:shadow-violet-500/80 hover:shadow-2xl hover:scale-110 transition-all duration-300
               animate-pulse hover:animate-none"
               onClick={onChatClick}
             >
@@ -102,7 +102,7 @@ const FloatingButtons = ({ onChatClick, onContactClick }) => {
             <Button
               size="icon"
               className="rounded-full w-12 h-12 bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600 
-              shadow-lg hover:shadow-violet-500/50 hover:scale-110 transition-all duration-300
+              shadow-lg hover:shadow-violet-500/80 hover:shadow-2xl hover:scale-110 transition-all duration-300
               animate-pulse hover:animate-none"
               onClick={() => window.open('https://youtube.com', '_blank')}
             >
@@ -124,92 +124,24 @@ const ChatPopup = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed bottom-24 right-6 w-80 z-50 animate-fadeIn">
-      <Card className="shadow-xl border-2 border-violet-500">
+      <Card className="shadow-2xl border-2 border-violet-500 bg-gray-50/95 dark:bg-gray-800/95 backdrop-blur-lg">
         <CardContent className="p-4">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="font-bold text-lg">AI Assistant</h3>
+            <h3 className="font-bold text-lg text-gray-900 dark:text-white">AI Assistant</h3>
             <Button variant="ghost" size="icon" onClick={onClose}>
               <X className="h-5 w-5" />
             </Button>
           </div>
-          <div className="h-64 overflow-y-auto mb-4 p-3 bg-gray-50 dark:bg-gray-800 rounded">
-            <p className="text-sm mb-2">Hello! How can I help you today?</p>
+          <div className="h-64 overflow-y-auto mb-4 p-3 bg-white dark:bg-gray-900 rounded shadow-inner">
+            <p className="text-sm mb-2 text-gray-800 dark:text-gray-200">Hello! How can I help you today?</p>
           </div>
           <div className="flex gap-2">
-            <Input placeholder="Type your message..." className="flex-1" />
-            <Button className="bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600 shadow-lg hover:shadow-violet-500/50">
+            <Input placeholder="Type your message..." className="flex-1 bg-white dark:bg-gray-900" />
+            <Button className="bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600 
+              shadow-lg hover:shadow-violet-500/50 hover:scale-105 transition-all duration-300">
               <Send className="h-4 w-4" />
             </Button>
           </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
-};
-
-// Sign Up Modal Component
-const SignUpModal = ({ isOpen, onClose, isDarkMode, onSubmit }) => {
-  if (!isOpen) return null;
-
-  const handleSocialLogin = (platform: string) => {
-    window.open({
-      'twitter': 'https://twitter.com/login',
-      'linkedin': 'https://linkedin.com/login',
-      'google': 'https://google.com'
-    }[platform], '_blank');
-  };
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center animate-fadeIn">
-      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
-      <Card className={`w-full max-w-md m-4 relative z-10 animate-slideUp ${isDarkMode ? 'bg-gray-800 border-gray-700' : ''}`}>
-        <CardContent className="p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold">Join ResearchDigest</h2>
-            <Button variant="ghost" size="icon" onClick={onClose}>×</Button>
-          </div>
-          
-          <form className="space-y-4">
-            <div className="space-y-2">
-              <label className="block text-sm font-medium">Full Name</label>
-              <Input className={`${isDarkMode ? 'bg-gray-700 border-gray-600' : ''}`} placeholder="John Doe" />
-            </div>
-            
-            <div className="space-y-2">
-              <label className="block text-sm font-medium">Email</label>
-              <Input type="email" className={`${isDarkMode ? 'bg-gray-700 border-gray-600' : ''}`} placeholder="john@example.com" />
-            </div>
-            
-            <div className="space-y-2">
-              <label className="block text-sm font-medium">Password</label>
-              <Input type="password" className={`${isDarkMode ? 'bg-gray-700 border-gray-600' : ''}`} />
-            </div>
-
-            <Button type="submit" className="w-full bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600 transition-all duration-300">
-              Create Account
-            </Button>
-
-            <div className="relative my-6">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300 dark:border-gray-700"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className={`px-2 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>Or continue with</span>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-3 gap-3">
-              <Button variant="outline" className="w-full hover:scale-105 transition-transform" onClick={() => handleSocialLogin('google')}>
-                <Globe className="h-5 w-5" />
-              </Button>
-              <Button variant="outline" className="w-full hover:scale-105 transition-transform" onClick={() => handleSocialLogin('twitter')}>
-                <Twitter className="h-5 w-5 text-[#1DA1F2]" />
-              </Button>
-              <Button variant="outline" className="w-full hover:scale-105 transition-transform" onClick={() => handleSocialLogin('linkedin')}>
-                <Linkedin className="h-5 w-5 text-[#0A66C2]" />
-              </Button>
-            </div>
-          </form>
         </CardContent>
       </Card>
     </div>
@@ -263,14 +195,14 @@ const Index = () => {
                 <Button
                   variant="ghost"
                   onClick={() => scrollToSection('about')}
-                  className="hover:scale-105 transition-transform hover:shadow-lg hover:shadow-violet-500/20"
+                  className="hover:scale-105 transition-transform hover:shadow-xl hover:shadow-violet-500/40"
                 >
                   About
                 </Button>
                 <Button
                   variant="ghost"
                   onClick={() => scrollToSection('features')}
-                  className="hover:scale-105 transition-transform hover:shadow-lg hover:shadow-violet-500/20"
+                  className="hover:scale-105 transition-transform hover:shadow-xl hover:shadow-violet-500/40"
                 >
                   Features
                 </Button>
@@ -278,7 +210,7 @@ const Index = () => {
                   variant="ghost"
                   size="icon"
                   onClick={() => setIsDarkMode(!isDarkMode)}
-                  className="rounded-full hover:scale-110 transition-transform hover:shadow-lg hover:shadow-violet-500/20"
+                  className="rounded-full hover:scale-110 transition-transform hover:shadow-xl hover:shadow-violet-500/40"
                 >
                   {isDarkMode ? 
                     <Sun className="h-5 w-5 animate-spin-slow" /> : 
@@ -289,7 +221,7 @@ const Index = () => {
                   <Button
                     onClick={() => setIsProfileOpen(true)}
                     className="bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600 
-                    text-white transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-violet-500/50"
+                    text-white transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-violet-500/80"
                   >
                     <User className="h-5 w-5 mr-2" />
                     Profile
@@ -298,7 +230,7 @@ const Index = () => {
                   <Button
                     onClick={() => setIsSignUpOpen(true)}
                     className="bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600 
-                    text-white transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-violet-500/50"
+                    text-white transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-violet-500/80"
                   >
                     Get Started
                   </Button>
