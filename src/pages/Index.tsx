@@ -1,13 +1,14 @@
-
 import React, { useState, useEffect } from 'react';
 import { 
   Mail, Moon, Sun, ArrowRight, BrainCircuit, Video, 
   Newspaper, Send, ArrowLeft, GraduationCap, Globe, 
-  BookOpen, Phone, Github, Twitter, Linkedin
+  BookOpen, Phone, Github, Twitter, Linkedin, 
+  MessageSquare, X, User
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Tooltip } from '@/components/ui/tooltip';
 
 // Animated Background Component
 const AnimatedBackground = () => (
@@ -16,8 +17,86 @@ const AnimatedBackground = () => (
   </div>
 );
 
+// User Profile Modal Component
+const UserProfileModal = ({ isOpen, onClose, isDarkMode }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center animate-fadeIn">
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
+      <Card className={`w-full max-w-md m-4 relative z-10 animate-slideUp ${isDarkMode ? 'bg-gray-800 border-gray-700' : ''}`}>
+        <CardContent className="p-6">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold">Profile</h2>
+            <Button variant="ghost" size="icon" onClick={onClose}>
+              <X className="h-5 w-5" />
+            </Button>
+          </div>
+          
+          <div className="space-y-6">
+            <div className="flex items-center space-x-4">
+              <div className="bg-gradient-to-r from-violet-500 to-purple-500 rounded-full p-8">
+                <User className="h-8 w-8 text-white" />
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold">John Doe</h3>
+                <p className="text-gray-600 dark:text-gray-300">john@example.com</p>
+              </div>
+            </div>
+            
+            <div className="space-y-4">
+              <h4 className="font-semibold">Preferences</h4>
+              <div className="space-y-2">
+                <label className="flex items-center space-x-2">
+                  <Input type="checkbox" className="rounded" />
+                  <span>Daily email notifications</span>
+                </label>
+                <label className="flex items-center space-x-2">
+                  <Input type="checkbox" className="rounded" />
+                  <span>Weekly digest</span>
+                </label>
+              </div>
+            </div>
+            
+            <Button className="w-full bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600">
+              Save Changes
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+// Floating Action Buttons Component
+const FloatingButtons = ({ onChatClick, onContactClick }) => {
+  return (
+    <div className="fixed bottom-6 right-6 flex flex-col space-y-4 z-40">
+      <Tooltip content="Chat with AI">
+        <Button
+          size="icon"
+          className="rounded-full w-12 h-12 bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600 shadow-lg hover:scale-110 transition-transform"
+          onClick={onChatClick}
+        >
+          <MessageSquare className="h-6 w-6 text-white" />
+        </Button>
+      </Tooltip>
+      
+      <Tooltip content="Contact Us">
+        <Button
+          size="icon"
+          className="rounded-full w-12 h-12 bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600 shadow-lg hover:scale-110 transition-transform"
+          onClick={onContactClick}
+        >
+          <Phone className="h-6 w-6 text-white" />
+        </Button>
+      </Tooltip>
+    </div>
+  );
+};
+
 // Sign Up Modal Component
-const SignUpModal = ({ isOpen, onClose, isDarkMode }) => {
+const SignUpModal = ({ isOpen, onClose, isDarkMode, onSubmit }) => {
   if (!isOpen) return null;
 
   const handleSocialLogin = (platform: string) => {
@@ -88,6 +167,8 @@ const SignUpModal = ({ isOpen, onClose, isDarkMode }) => {
 const Index = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
 
   useEffect(() => {
@@ -95,6 +176,23 @@ const Index = () => {
       setIsDarkMode(window.matchMedia('(prefers-color-scheme: dark)').matches);
     }
   }, []);
+
+  const handleSignUpSubmit = (e) => {
+    e.preventDefault();
+    setIsSignUpOpen(false);
+    setIsLoggedIn(true);
+    setIsProfileOpen(true);
+  };
+
+  const handleChatClick = () => {
+    // Implement chat functionality
+    console.log('Chat clicked');
+  };
+
+  const handleContactClick = () => {
+    // Implement contact functionality
+    console.log('Contact clicked');
+  };
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -140,12 +238,22 @@ const Index = () => {
                     <Moon className="h-5 w-5 animate-spin-slow" />
                   }
                 </Button>
-                <Button
-                  onClick={() => setIsSignUpOpen(true)}
-                  className="bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600 text-white transition-all duration-300 hover:scale-105"
-                >
-                  Get Started
-                </Button>
+                {isLoggedIn ? (
+                  <Button
+                    onClick={() => setIsProfileOpen(true)}
+                    className="bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600 text-white transition-all duration-300 hover:scale-105"
+                  >
+                    <User className="h-5 w-5 mr-2" />
+                    Profile
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={() => setIsSignUpOpen(true)}
+                    className="bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600 text-white transition-all duration-300 hover:scale-105"
+                  >
+                    Get Started
+                  </Button>
+                )}
               </div>
             </div>
           </div>
@@ -237,10 +345,24 @@ const Index = () => {
           </div>
         </section>
 
+        {/* Floating Action Buttons */}
+        <FloatingButtons 
+          onChatClick={handleChatClick}
+          onContactClick={handleContactClick}
+        />
+
         {/* Sign Up Modal */}
         <SignUpModal 
           isOpen={isSignUpOpen} 
           onClose={() => setIsSignUpOpen(false)} 
+          isDarkMode={isDarkMode}
+          onSubmit={handleSignUpSubmit}
+        />
+
+        {/* User Profile Modal */}
+        <UserProfileModal
+          isOpen={isProfileOpen}
+          onClose={() => setIsProfileOpen(false)}
           isDarkMode={isDarkMode}
         />
       </div>
