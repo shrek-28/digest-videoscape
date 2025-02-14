@@ -8,7 +8,12 @@ import {
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Tooltip } from '@/components/ui/tooltip';
+import { 
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 // Animated Background Component
 const AnimatedBackground = () => (
@@ -72,25 +77,39 @@ const UserProfileModal = ({ isOpen, onClose, isDarkMode }) => {
 const FloatingButtons = ({ onChatClick, onContactClick }) => {
   return (
     <div className="fixed bottom-6 right-6 flex flex-col space-y-4 z-40">
-      <Tooltip content="Chat with AI">
-        <Button
-          size="icon"
-          className="rounded-full w-12 h-12 bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600 shadow-lg hover:scale-110 transition-transform"
-          onClick={onChatClick}
-        >
-          <MessageSquare className="h-6 w-6 text-white" />
-        </Button>
-      </Tooltip>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              size="icon"
+              className="rounded-full w-12 h-12 bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600 shadow-lg hover:scale-110 transition-transform"
+              onClick={onChatClick}
+            >
+              <MessageSquare className="h-6 w-6 text-white" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Chat with AI</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
       
-      <Tooltip content="Contact Us">
-        <Button
-          size="icon"
-          className="rounded-full w-12 h-12 bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600 shadow-lg hover:scale-110 transition-transform"
-          onClick={onContactClick}
-        >
-          <Phone className="h-6 w-6 text-white" />
-        </Button>
-      </Tooltip>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              size="icon"
+              className="rounded-full w-12 h-12 bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600 shadow-lg hover:scale-110 transition-transform"
+              onClick={onContactClick}
+            >
+              <Phone className="h-6 w-6 text-white" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Contact Us</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
     </div>
   );
 };
