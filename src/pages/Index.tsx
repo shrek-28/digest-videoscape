@@ -82,7 +82,9 @@ const FloatingButtons = ({ onChatClick, onContactClick }) => {
           <TooltipTrigger asChild>
             <Button
               size="icon"
-              className="rounded-full w-12 h-12 bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600 shadow-lg hover:scale-110 transition-transform"
+              className="rounded-full w-12 h-12 bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600 
+              shadow-lg hover:shadow-violet-500/50 hover:scale-110 transition-all duration-300
+              animate-pulse hover:animate-none"
               onClick={onChatClick}
             >
               <MessageSquare className="h-6 w-6 text-white" />
@@ -99,17 +101,48 @@ const FloatingButtons = ({ onChatClick, onContactClick }) => {
           <TooltipTrigger asChild>
             <Button
               size="icon"
-              className="rounded-full w-12 h-12 bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600 shadow-lg hover:scale-110 transition-transform"
-              onClick={onContactClick}
+              className="rounded-full w-12 h-12 bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600 
+              shadow-lg hover:shadow-violet-500/50 hover:scale-110 transition-all duration-300
+              animate-pulse hover:animate-none"
+              onClick={() => window.open('https://youtube.com', '_blank')}
             >
               <Phone className="h-6 w-6 text-white" />
             </Button>
           </TooltipTrigger>
           <TooltipContent>
-            <p>Contact Us</p>
+            <p>Contact Us on YouTube</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
+    </div>
+  );
+};
+
+// Chat Popup Component
+const ChatPopup = ({ isOpen, onClose }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed bottom-24 right-6 w-80 z-50 animate-fadeIn">
+      <Card className="shadow-xl border-2 border-violet-500">
+        <CardContent className="p-4">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="font-bold text-lg">AI Assistant</h3>
+            <Button variant="ghost" size="icon" onClick={onClose}>
+              <X className="h-5 w-5" />
+            </Button>
+          </div>
+          <div className="h-64 overflow-y-auto mb-4 p-3 bg-gray-50 dark:bg-gray-800 rounded">
+            <p className="text-sm mb-2">Hello! How can I help you today?</p>
+          </div>
+          <div className="flex gap-2">
+            <Input placeholder="Type your message..." className="flex-1" />
+            <Button className="bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600 shadow-lg hover:shadow-violet-500/50">
+              <Send className="h-4 w-4" />
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
@@ -188,6 +221,7 @@ const Index = () => {
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
 
   useEffect(() => {
@@ -204,13 +238,7 @@ const Index = () => {
   };
 
   const handleChatClick = () => {
-    // Implement chat functionality
-    console.log('Chat clicked');
-  };
-
-  const handleContactClick = () => {
-    // Implement contact functionality
-    console.log('Contact clicked');
+    setIsChatOpen(!isChatOpen);
   };
 
   const scrollToSection = (sectionId: string) => {
@@ -235,14 +263,14 @@ const Index = () => {
                 <Button
                   variant="ghost"
                   onClick={() => scrollToSection('about')}
-                  className="hover:scale-105 transition-transform"
+                  className="hover:scale-105 transition-transform hover:shadow-lg hover:shadow-violet-500/20"
                 >
                   About
                 </Button>
                 <Button
                   variant="ghost"
                   onClick={() => scrollToSection('features')}
-                  className="hover:scale-105 transition-transform"
+                  className="hover:scale-105 transition-transform hover:shadow-lg hover:shadow-violet-500/20"
                 >
                   Features
                 </Button>
@@ -250,7 +278,7 @@ const Index = () => {
                   variant="ghost"
                   size="icon"
                   onClick={() => setIsDarkMode(!isDarkMode)}
-                  className="rounded-full hover:scale-110 transition-transform"
+                  className="rounded-full hover:scale-110 transition-transform hover:shadow-lg hover:shadow-violet-500/20"
                 >
                   {isDarkMode ? 
                     <Sun className="h-5 w-5 animate-spin-slow" /> : 
@@ -260,7 +288,8 @@ const Index = () => {
                 {isLoggedIn ? (
                   <Button
                     onClick={() => setIsProfileOpen(true)}
-                    className="bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600 text-white transition-all duration-300 hover:scale-105"
+                    className="bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600 
+                    text-white transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-violet-500/50"
                   >
                     <User className="h-5 w-5 mr-2" />
                     Profile
@@ -268,7 +297,8 @@ const Index = () => {
                 ) : (
                   <Button
                     onClick={() => setIsSignUpOpen(true)}
-                    className="bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600 text-white transition-all duration-300 hover:scale-105"
+                    className="bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600 
+                    text-white transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-violet-500/50"
                   >
                     Get Started
                   </Button>
@@ -318,13 +348,15 @@ const Index = () => {
                 of papers daily to bring you the most relevant insights.
               </p>
               <div className="grid md:grid-cols-2 gap-8">
-                <Card className={`p-6 ${isDarkMode ? 'bg-gray-800 border-gray-700' : ''}`}>
+                <Card className={`p-6 hover:scale-105 transition-transform duration-300 hover:shadow-xl hover:shadow-violet-500/20
+                  bg-gradient-to-br from-white to-violet-50 dark:from-gray-800 dark:to-violet-900/20 ${isDarkMode ? 'border-gray-700' : ''}`}>
                   <h3 className="text-xl font-bold mb-4">Our Mission</h3>
                   <p className="text-gray-600 dark:text-gray-300">
                     To make research accessible and engaging for everyone in academia and industry.
                   </p>
                 </Card>
-                <Card className={`p-6 ${isDarkMode ? 'bg-gray-800 border-gray-700' : ''}`}>
+                <Card className={`p-6 hover:scale-105 transition-transform duration-300 hover:shadow-xl hover:shadow-violet-500/20
+                  bg-gradient-to-br from-white to-violet-50 dark:from-gray-800 dark:to-violet-900/20 ${isDarkMode ? 'border-gray-700' : ''}`}>
                   <h3 className="text-xl font-bold mb-4">Our Vision</h3>
                   <p className="text-gray-600 dark:text-gray-300">
                     To revolutionize how researchers stay updated with cutting-edge developments.
@@ -340,22 +372,26 @@ const Index = () => {
           <div className="container mx-auto px-4">
             <h2 className="text-4xl font-bold text-center mb-12">Key Features</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-              <Card className={`p-6 transform transition-all duration-300 hover:scale-105 ${isDarkMode ? 'bg-gray-800 border-gray-700' : ''}`}>
+              <Card className={`p-6 transform transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-violet-500/20
+                bg-gradient-to-br from-white to-violet-50 dark:from-gray-800 dark:to-violet-900/20 ${isDarkMode ? 'border-gray-700' : ''}`}>
                 <BrainCircuit className="w-12 h-12 mb-4 text-violet-500" />
                 <h3 className="text-xl font-bold mb-2">AI-Powered Analysis</h3>
                 <p className="text-gray-600 dark:text-gray-300">Advanced algorithms process thousands of papers daily</p>
               </Card>
-              <Card className={`p-6 transform transition-all duration-300 hover:scale-105 ${isDarkMode ? 'bg-gray-800 border-gray-700' : ''}`}>
+              <Card className={`p-6 transform transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-violet-500/20
+                bg-gradient-to-br from-white to-purple-50 dark:from-gray-800 dark:to-purple-900/20 ${isDarkMode ? 'border-gray-700' : ''}`}>
                 <Video className="w-12 h-12 mb-4 text-purple-500" />
                 <h3 className="text-xl font-bold mb-2">Video Summaries</h3>
                 <p className="text-gray-600 dark:text-gray-300">Engaging video content from complex research papers</p>
               </Card>
-              <Card className={`p-6 transform transition-all duration-300 hover:scale-105 ${isDarkMode ? 'bg-gray-800 border-gray-700' : ''}`}>
+              <Card className={`p-6 transform transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-violet-500/20
+                bg-gradient-to-br from-white to-pink-50 dark:from-gray-800 dark:to-pink-900/20 ${isDarkMode ? 'border-gray-700' : ''}`}>
                 <Newspaper className="w-12 h-12 mb-4 text-pink-500" />
                 <h3 className="text-xl font-bold mb-2">Daily Updates</h3>
                 <p className="text-gray-600 dark:text-gray-300">Fresh research content delivered every day</p>
               </Card>
-              <Card className={`p-6 transform transition-all duration-300 hover:scale-105 ${isDarkMode ? 'bg-gray-800 border-gray-700' : ''}`}>
+              <Card className={`p-6 transform transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-violet-500/20
+                bg-gradient-to-br from-white to-violet-50 dark:from-gray-800 dark:to-violet-900/20 ${isDarkMode ? 'border-gray-700' : ''}`}>
                 <Send className="w-12 h-12 mb-4 text-violet-500" />
                 <h3 className="text-xl font-bold mb-2">Email Delivery</h3>
                 <p className="text-gray-600 dark:text-gray-300">Convenient delivery straight to your inbox</p>
@@ -364,10 +400,14 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Floating Action Buttons */}
+        {/* Floating Action Buttons and Chat */}
         <FloatingButtons 
           onChatClick={handleChatClick}
-          onContactClick={handleContactClick}
+          onContactClick={() => {}}
+        />
+        <ChatPopup 
+          isOpen={isChatOpen} 
+          onClose={() => setIsChatOpen(false)} 
         />
 
         {/* Sign Up Modal */}
