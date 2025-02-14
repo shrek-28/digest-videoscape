@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { 
   Mail, Moon, Sun, ArrowRight, BrainCircuit, Video, 
   Newspaper, Send, ArrowLeft, GraduationCap, Globe, 
-  BookOpen, Phone, Github, Twitter, Linkedin, Google
+  BookOpen, Phone, Github, Twitter, Linkedin
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -61,7 +61,7 @@ const SignUpModal = ({ isOpen, onClose, isDarkMode }) => {
 
             <div className="grid grid-cols-3 gap-3">
               <Button variant="outline" className="w-full hover:scale-105 transition-transform">
-                <Google className="h-5 w-5" />
+                <Globe className="h-5 w-5" />
               </Button>
               <Button variant="outline" className="w-full hover:scale-105 transition-transform">
                 <Twitter className="h-5 w-5 text-[#1DA1F2]" />
